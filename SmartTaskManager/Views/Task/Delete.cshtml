@@ -1,0 +1,21 @@
+﻿@model SmartTaskManagerCore.Core.Entities.TaskItem
+
+@{
+    ViewData["Title"] = "Delete Task";
+}
+
+<h2>Delete Task</h2>
+
+<div class="alert alert-danger mt-3">
+    <p>Are you sure you want to delete this task?</p>
+    <h4>@Model.Title</h4>
+    <p>@Model.Description</p>
+    <p><strong>Status:</strong> @Model.Status</p>
+    <p><strong>Priority:</strong> @Model.Priority</p>
+</div>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+</form>
