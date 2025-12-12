@@ -1,0 +1,138 @@
+﻿@using SmartTaskManager.Core.Entities
+@using SmartTaskManager.Core.Helpers.Enums
+@model IEnumerable<TaskItem>
+
+<table class="table table-hover table-bordered align-middle text-center custom-table">
+    <thead class="table-light">
+        <tr>
+            <th>
+                <a href="#" class="sort-link" data-column="Title">
+                    Title
+                    @if (ViewData["CurrentSortColumn"]?.ToString() == nameof(TaskItem.Title))
+                    {
+                        <i class="fa-solid @(ViewData["CurrentSortDir"]?.ToString() == "asc" ? "fa-arrow-up" : "fa-arrow-down")"></i>
+                    }
+                </a>
+            </th>
+            <th>
+                <a href="#" class="sort-link" data-column="Status">
+                    Status
+                    @if (ViewData["CurrentSortColumn"]?.ToString() == "Status")
+                    {
+                        <i class="fa-solid @(ViewData["CurrentSortDir"]?.ToString() == "asc" ? "fa-arrow-up" : "fa-arrow-down")"></i>
+                    }
+                </a>
+            </th>
+            <th>
+                <a href="#" class="sort-link" data-column="Priority">
+                    Priority
+                    @if (ViewData["CurrentSortColumn"]?.ToString() == "Priority")
+                    {
+                        <i class="fa-solid @(ViewData["CurrentSortDir"]?.ToString() == "asc" ? "fa-arrow-up" : "fa-arrow-down")"></i>
+                    }
+                </a>
+            </th>
+            <th>
+                <a href="#" class="sort-link" data-column="CreatedAt">
+                    Created
+                    @if (ViewData["CurrentSortColumn"]?.ToString() == "CreatedAt")
+                    {
+                        <i class="fa-solid @(ViewData["CurrentSortDir"]?.ToString() == "asc" ? "fa-arrow-up" : "fa-arrow-down")"></i>
+                    }
+                </a>
+            </th>
+            <th>
+                <a href="#" class="sort-link" data-column="Deadline">
+                    Deadline
+                    @if (ViewData["CurrentSortColumn"]?.ToString() == "Deadline")
+                    {
+                        <i class="fa-solid @(ViewData["CurrentSortDir"]?.ToString() == "asc" ? "fa-arrow-up" : "fa-arrow-down")"></i>
+                    }
+                </a>
+            </th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var task in Model)
+        {
+            <tr>
+                <td>@task.Title</td>
+                <td>
+                    @switch (task.Status)
+                    {
+                        case StatusEnum.Done:
+                            <span class="badge bg-success">Done</span>
+                            ;
+                            break;
+                        case StatusEnum.InProgress:
+                            <span class="badge bg-warning text-dark">In Progress</span>
+                            ;
+                            break;
+                        default:
+                            <span class="badge bg-secondary">To Do</span>
+                            ;
+                            break;
+                    }
+                </td>
+                <td>
+                    @switch (task.Priority)
+                    {
+                        case PriorityEnum.High:
+                            <span class="badge bg-danger">High</span>
+                            ;
+                            break;
+                        case PriorityEnum.Medium:
+                            <span class="badge bg-primary">Medium</span>
+                            ;
+                            break;
+                        default:
+                            <span class="badge bg-success">Low</span>
+                            ;
+                            break;
+                    }
+                </td>
+                <td>@task.CreatedAt.ToString("dd MMM yyyy HH:mm")</td>
+                <td class="@(task.Deadline < DateTime.Now ? "text-danger fw-bold" : "")">
+                    @task.Deadline.ToString("dd MMM yyyy")
+                </td>
+                <td class="d-flex justify-content-center gap-1">
+                    <a asp-action="Edit" asp-route-id="@task.Id" class="btn-warning" title="Edit">
+                        <i class="fa-solid fa-pen"></i>
+                    </a>
+
+                    <button type="button" class="btn-danger delete-btn" data-id="@task.Id" title="Delete">
+                        <i class="fa-solid fa-trash"></i>
+                    </button>
+
+                    @if (task.Status != StatusEnum.Done)
+                    {
+                        <form asp-action="MarkAsDone" method="post" class="d-inline">
+                            <input type="hidden" name="id" value="@task.Id" />
+                            <button type="submit" class="btn-toggle-done">✓ Mark as Done</button>
+                        </form>
+                    }
+                    else
+                    {
+                        <button class="btn-toggle-done done" disabled>Done</button>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<nav>
+    <ul class="pagination justify-content-center">
+        @{
+            int totalPages = (int)ViewData["TotalPages"];
+            int currentPage = (int)ViewData["Page"];
+            for (int i = 1; i <= totalPages; i++)
+            {
+                <li class="page-item @(i == currentPage ? "active" : "")">
+                    <a href="#" class="page-link" data-page="@i">@i</a>
+                </li>
+            }
+        }
+    </ul>
+</nav>

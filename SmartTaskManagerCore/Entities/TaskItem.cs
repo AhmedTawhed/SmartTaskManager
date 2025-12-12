@@ -1,7 +1,7 @@
-﻿using SmartTaskManagerCore.Helpers.Enums;
+﻿using SmartTaskManager.Core.Helpers.Enums;
 using System.ComponentModel.DataAnnotations;
 
-namespace SmartTaskManagerCore.Core.Entities
+namespace SmartTaskManager.Core.Entities
 {
     public class TaskItem
     {
@@ -16,12 +16,10 @@ namespace SmartTaskManagerCore.Core.Entities
         public string Description { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Status is required.")]
-        //[RegularExpression("ToDo|InProgress|Done", ErrorMessage = "Status must be ToDo, InProgress, or Done.")]
         public StatusEnum Status { get; set; }
 
-        [Required]
-        [RegularExpression("Low|Medium|High", ErrorMessage = "Priority must be Low, Medium, or High.")]
-        public string Priority { get; set; } = "Medium";
+        [Required(ErrorMessage = "Priority is required.")]
+        public PriorityEnum Priority { get; set; } = PriorityEnum.Medium;
 
         [Required]
         public DateTime Deadline { get; set; } = DateTime.Now;

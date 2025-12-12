@@ -1,4 +1,4 @@
-﻿namespace SmartTaskManagerCore.Core.Interfaces.IRepository
+﻿namespace SmartTaskManager.Core.Interfaces.IRepository
 {
     public interface IUnitOfWork : IAsyncDisposable
     {

@@ -1,12 +1,13 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using SmartTaskManager.Application.Services;
-using SmartTaskManagerCore.Core.Entities;
-using SmartTaskManagerCore.Core.Interfaces.IRepository;
-using SmartTaskManagerCore.Core.Interfaces.IService;
-using SmartTaskManagerData.Infrastructure.Data;
-using SmartTaskManagerData.Infrastructure.Repositories;
-using SmartTaskManagerData.Infrastructure.Repository;
+using SmartTaskManager.Core.Entities;
+using SmartTaskManager.Core.Interfaces.IRepository;
+using SmartTaskManager.Core.Interfaces.IService;
+using SmartTaskManager.Infrastructure.Data;
+using SmartTaskManager.Infrastructure.Data.Seeding;
+using SmartTaskManager.Infrastructure.Repository;
+using SmartTaskManager.Infrastructure.Services;
+using SmartTaskManager.Middlewares;
 
 namespace SmartTaskManager
 {
@@ -16,40 +17,44 @@ namespace SmartTaskManager
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
             builder.Services.AddControllersWithViews();
+
             builder.Services.AddDbContext<TaskDbContext>(options =>
-            options.UseSqlServer(builder.Configuration.GetConnectionString("cs")));
+                options.UseSqlServer(builder.Configuration.GetConnectionString("SmartTaskDbContext")));
+
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(options =>
             {
                 options.Password.RequireNonAlphanumeric = false;
                 options.Password.RequireUppercase = false;
                 options.Password.RequiredLength = 6;
             })
-                .AddEntityFrameworkStores<TaskDbContext>()
-                .AddDefaultTokenProviders();
-
+            .AddEntityFrameworkStores<TaskDbContext>()
+            .AddDefaultTokenProviders();
 
             builder.Services.AddScoped(typeof(IRepository<>), typeof(Repository<>));
             builder.Services.AddScoped<ITaskRepository, TaskRepository>();
             builder.Services.AddScoped<ITaskService, TaskService>();
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             builder.Services.AddScoped<IAuthService, AuthService>();
+
             builder.Services.AddHttpContextAccessor();
             builder.Services.AddAntiforgery();
+
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
+            app.UseMiddleware<GlobalExceptionMiddleware>();
+
             if (!app.Environment.IsDevelopment())
             {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+
+            SeedData.Initialize(app.Services);
 
             app.UseHttpsRedirection();
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapStaticAssets();

@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using SmartTaskManagerCore.Core.Entities;
-using SmartTaskManagerCore.Core.Interfaces.IService;
-using SmartTaskManagerCore.ViewModel;
+using SmartTaskManager.Core.Entities;
+using SmartTaskManager.Core.Interfaces.IService;
+using SmartTaskManager.Core.ViewModel;
 
-namespace SmartTaskManager.Application.Services
+namespace SmartTaskManager.Infrastructure.Services
 {
     public class AuthService : IAuthService
     {

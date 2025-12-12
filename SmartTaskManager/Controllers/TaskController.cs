@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using SmartTaskManagerCore.Core.Entities;
-using SmartTaskManagerCore.Core.Interfaces.IService;
+using SmartTaskManager.Core.Entities;
+using SmartTaskManager.Core.Helpers.CustomRequests;
+using SmartTaskManager.Core.Interfaces.IService;
 
 namespace SmartTaskManager.Controllers
 {
@@ -18,13 +19,31 @@ namespace SmartTaskManager.Controllers
             _userManager = userManager;
         }
 
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sortColumn, string sortDir, string search, int page = 1)
         {
-            var userId = _userManager.GetUserId(User);
-            var tasks = await _taskService.GetTasksForUser(userId);
-            return View(tasks);
-        }
+            string userId = _userManager.GetUserId(User);
 
+            var gridRequest = new GridRequest
+            {
+                PageNumber = page,
+                SortColumn = sortColumn,
+                SortDirection = sortDir,
+                SearchText = search
+            };
+
+            var tasks = await _taskService.GetPage(gridRequest,userId);
+
+            ViewData["CurrentSortColumn"] = sortColumn ?? "CreatedAt";
+            ViewData["CurrentSortDir"] = sortDir ?? "asc";
+            ViewData["CurrentSearch"] = search ?? "";
+            ViewData["Page"] = page;
+            ViewData["TotalPages"] = tasks.NumberOfPages;
+
+            if (Request.Headers["X-Requested-With"] == "XMLHttpRequest")
+                return PartialView("_TasksTablePartial", tasks.Items);
+
+            return View(tasks.Items);
+        }
         public IActionResult Create() => View();
 
 
@@ -71,12 +90,24 @@ namespace SmartTaskManager.Controllers
         {
             var userId = _userManager.GetUserId(User);
 
-            var success = await _taskService.Delete(id, userId);
+            var deleted = await _taskService.Delete(id, userId);
 
-            if (!success)
+            if (!deleted)
                 return Unauthorized();
 
             TempData["SuccessMessage"] = "Task deleted successfully!";
+            return RedirectToAction(nameof(Index));
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> MarkAsDone(Guid id)
+        {
+            var userId = _userManager.GetUserId(User);
+            var marked = await _taskService.MarkTaskAsDone(id, userId);
+            if (!marked)
+                return NotFound();
+
+            TempData["SuccessMessage"] = "Task marked as done!";
             return RedirectToAction(nameof(Index));
         }
     }

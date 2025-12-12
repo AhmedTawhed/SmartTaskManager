@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using SmartTaskManagerCore.Core.Entities;
+using SmartTaskManager.Core.Entities;
 
-namespace SmartTaskManagerData.Infrastructure.Data
+namespace SmartTaskManager.Infrastructure.Data
 {
     public class TaskDbContext : IdentityDbContext<ApplicationUser>
     {

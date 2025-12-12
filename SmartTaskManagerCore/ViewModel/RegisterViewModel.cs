@@ -1,12 +1,11 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
-namespace SmartTaskManagerCore.ViewModel
+namespace SmartTaskManager.Core.ViewModel
 {
     public class RegisterViewModel
     {
         [Required(ErrorMessage = "Username is required")]
-        [Display(Name = "User Name")]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Username must be between 3 and 50 characters")]
         public string UserName { get; set; } = null!;
 

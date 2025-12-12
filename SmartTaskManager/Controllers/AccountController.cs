@@ -1,16 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using SmartTaskManagerCore.Core.Interfaces.IService;
-using SmartTaskManagerCore.ViewModel;
+using SmartTaskManager.Core.Interfaces.IService;
+using SmartTaskManager.Core.ViewModel;
 
 namespace SmartTaskManager.Controllers
 {
     public class AccountController : Controller
     {
-        private readonly IAuthService _auth;
+        private readonly IAuthService _authService;
 
-        public AccountController(IAuthService auth)
+        public AccountController(IAuthService authService)
         {
-            _auth = auth;
+            _authService = authService;
         }
         [HttpGet]
         public IActionResult Register() => View();
@@ -19,12 +19,13 @@ namespace SmartTaskManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _auth.Register(model);
+                var result = await _authService.Register(model);
 
                 if (result.Succeeded)
                 {
                     return RedirectToAction("Index", "Home");
                 }
+
                 foreach (var item in result.Errors)
                     ModelState.AddModelError("",item.Description);
             }
@@ -37,7 +38,7 @@ namespace SmartTaskManager.Controllers
         {
             if (ModelState.IsValid)
             {
-                var result = await _auth.Login(model);
+                var result = await _authService.Login(model);
                 if (result.Succeeded) return RedirectToAction("Index", "Home");
 
                 ModelState.AddModelError("", "Ivalid login attempt");
@@ -47,7 +48,7 @@ namespace SmartTaskManager.Controllers
         [HttpPost]
         public async Task<IActionResult> Logout()
         {
-            await _auth.Logout();
+            await _authService.Logout();
             return RedirectToAction("Login");
         }
     }
