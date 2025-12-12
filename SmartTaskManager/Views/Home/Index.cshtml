@@ -1,8 +1,49 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Smart Task Manager";
+    var isLoggedIn = User.Identity.IsAuthenticated;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="landing-container text-center">
+    <h1 class="landing-title animate-fade">Smart Task Manager</h1>
+    <p class="landing-subtitle animate-fade delay-1">
+        Manage your tasks efficiently, track your progress, and stay productive every day.
+    </p>
+
+    <div class="landing-buttons mb-5 animate-fade delay-2">
+        @if (!isLoggedIn)
+        {
+            <a class="btn btn-gradient btn-lg me-3" asp-controller="Account" asp-action="Register">Register</a>
+            <a class="btn btn-outline-dark btn-lg" asp-controller="Account" asp-action="Login">Login</a>
+        }
+        else
+        {
+            <a class="btn btn-gradient btn-lg" asp-controller="Task" asp-action="Index">
+                Go to My Tasks
+            </a>
+        }
+    </div>
+
+    <section class="features row g-4 justify-content-center animate-fade delay-3">
+        <div class="col-md-4">
+            <div class="card h-100 p-4 text-center shadow-sm feature-card">
+                <i class="fas fa-tasks fa-3x mb-3 text-primary"></i>
+                <h5 class="fw-bold mt-2">Easy Task Management</h5>
+                <p class="text-muted">Add, edit, and complete your tasks easily.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 p-4 text-center shadow-sm feature-card">
+                <i class="fas fa-bolt fa-3x mb-3 text-warning"></i>
+                <h5 class="fw-bold mt-2">Boost Productivity</h5>
+                <p class="text-muted">Track your tasks and stay focused daily.</p>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card h-100 p-4 text-center shadow-sm feature-card">
+                <i class="fas fa-lock fa-3x mb-3 text-danger"></i>
+                <h5 class="fw-bold mt-2">Private & Secure</h5>
+                <p class="text-muted">Each user sees only their own tasks.</p>
+            </div>
+        </div>
+    </section>
 </div>

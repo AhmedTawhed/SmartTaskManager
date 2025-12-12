@@ -1,8 +1,11 @@
-﻿using SmartTaskManagerCore.Core.Entities;
-using SmartTaskManagerCore.Core.Interfaces.IRepository;
-using SmartTaskManagerCore.Core.Interfaces.IService;
+﻿using SmartTaskManager.Core.Entities;
+using SmartTaskManager.Core.Helpers.CustomRequests;
+using SmartTaskManager.Core.Helpers.CustomResults;
+using SmartTaskManager.Core.Helpers.Enums;
+using SmartTaskManager.Core.Interfaces.IRepository;
+using SmartTaskManager.Core.Interfaces.IService;
 
-namespace SmartTaskManager.Application.Services
+namespace SmartTaskManager.Infrastructure.Services
 {
     public class TaskService : ITaskService
     {
@@ -42,5 +45,23 @@ namespace SmartTaskManager.Application.Services
             await _unitOfWork.CompleteAsync();
             return true;
         }
+
+        public async Task<PagedList<TaskItem>> GetPage(GridRequest request,string userId)
+        {
+            return await _unitOfWork.Tasks.GetPage(request, t => t.UserId == userId);
+        }
+        public async Task<bool> MarkTaskAsDone(Guid taskId, string userId)
+        {
+            var task = await _unitOfWork.Tasks.GetTaskByIdForUser(taskId, userId);
+            if (task == null)
+                return false;
+
+            task.Status = StatusEnum.Done;
+
+            _unitOfWork.Tasks.Update(task);
+            await _unitOfWork.CompleteAsync();
+            return true;
+        }
+
     }
 }

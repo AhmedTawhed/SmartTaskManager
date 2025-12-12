@@ -1,51 +1,59 @@
-﻿@using SmartTaskManagerCore.Helpers.Enums
-@model SmartTaskManagerCore.Core.Entities.TaskItem
+﻿@using SmartTaskManager.Core.Entities
+@using SmartTaskManager.Core.Helpers.Enums
+@model TaskItem
 
 @{
     ViewData["Title"] = "Create Task";
 }
 
-<h2>Create Task</h2>
+<h2 class="mt-4 mb-4 text-primary fw-bold">Create Task</h2>
 
-<form asp-action="Create" method="post" class="mt-3">
-    <div class="mb-3">
-        <label asp-for="Title" class="form-label"></label>
-        <input asp-for="Title" class="form-control" />
-        <span asp-validation-for="Title" class="text-danger"></span>
+<div style="min-height: calc(100vh - 120px); display:flex; flex-direction:column; justify-content:flex-start;">
+    <div class="card shadow-sm p-4 flex-grow-1 mx-auto" style="max-width:700px; width:100%;">
+        <form asp-action="Create" method="post">
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label fw-semibold"></label>
+                <input asp-for="Title" class="form-control form-control-lg" placeholder="Enter task title" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label fw-semibold"></label>
+                <textarea asp-for="Description" class="form-control" rows="4" placeholder="Enter task description"></textarea>
+            </div>
+
+            <div class="row">
+                <div class="mb-3 col-md-6">
+                    <label asp-for="Status" class="form-label fw-semibold"></label>
+                    <select asp-for="Status" class="form-select"
+                            asp-items="Html.GetEnumSelectList<StatusEnum>()">
+                        <option value="">-- Select status --</option>
+                    </select>
+                    <span asp-validation-for="Status" class="text-danger"></span>
+                </div>
+                <div class="mb-3 col-md-6">
+                    <label asp-for="Priority" class="form-label fw-semibold"></label>
+                    <select asp-for="Priority" class="form-select"
+                            asp-items="Html.GetEnumSelectList<PriorityEnum>()">
+                        <option value="">-- Select priority --</option>
+                    </select>
+                    <span asp-validation-for="Priority" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Deadline" class="form-label fw-semibold"></label>
+                <input asp-for="Deadline" type="date" class="form-control" />
+                <span asp-validation-for="Deadline" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex justify-content-end mt-4">
+                <a asp-action="Index" class="btn btn-secondary me-2 px-4">Back</a>
+                <button type="submit" class="btn btn-success px-4">Save</button>
+            </div>
+        </form>
     </div>
-
-    <div class="mb-3">
-        <label asp-for="Description" class="form-label"></label>
-        <textarea asp-for="Description" class="form-control"></textarea>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Status" class="form-label"></label>
-        <select asp-for="Status" class="form-select"
-                asp-items="Html.GetEnumSelectList<StatusEnum>()">
-            <option value="">-- Select status --</option>
-        </select>
-        <span asp-validation-for="Status" class="text-danger"></span>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Priority" class="form-label"></label>
-        <select asp-for="Priority" class="form-select">
-            <option>Low</option>
-            <option>Medium</option>
-            <option>High</option>
-        </select>
-    </div>
-
-    <div class="mb-3">
-        <label asp-for="Deadline" class="form-label"></label>
-        <input asp-for="Deadline" type="date" class="form-control" />
-        <span asp-validation-for="Deadline" class="text-danger"></span>
-    </div>
-
-    <button type="submit" class="btn btn-success">Save</button>
-    <a asp-action="Index" class="btn btn-secondary">Back</a>
-</form>
+</div>
 
 @section Scripts {
     <partial name="_ValidationScriptsPartial" />

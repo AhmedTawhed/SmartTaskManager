@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace SmartTaskManagerCore.ViewModel
+namespace SmartTaskManager.Core.ViewModel
 {
     public class LoginViewModel
     {

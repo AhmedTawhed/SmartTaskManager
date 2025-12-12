@@ -1,11 +1,12 @@
-﻿using SmartTaskManagerCore.Core.Entities;
+﻿using SmartTaskManager.Core.Entities;
 
-namespace SmartTaskManagerCore.Core.Interfaces.IRepository
+namespace SmartTaskManager.Core.Interfaces.IRepository
 {
     public interface ITaskRepository : IRepository<TaskItem>
     {
         Task<IEnumerable<TaskItem>> GetUserTasksAsync(string userId);
         bool IsTaskRelatedToUser(Guid id, string userId);
+        Task<TaskItem?> GetTaskByIdForUser(Guid id, string userId);
 
     }
 }

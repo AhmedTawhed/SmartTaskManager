@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 
-namespace SmartTaskManagerCore.Core.Entities
+namespace SmartTaskManager.Core.Entities
 {
     public class ApplicationUser : IdentityUser
     {

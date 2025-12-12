@@ -18,8 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SmartTaskManagerCore\SmartTaskManagerCore.csproj" />
-    <ProjectReference Include="..\SmartTaskManagerData\SmartTaskManagerData.csproj" />
+    <ProjectReference Include="..\SmartTaskManagerCore\SmartTaskManager.Core.csproj" />
+    <ProjectReference Include="..\SmartTaskManagerData\SmartTaskManager.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
