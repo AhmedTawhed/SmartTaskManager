@@ -13,6 +13,8 @@ namespace SmartTaskManager.Infrastructure.Data.Seeding
             var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
             var context = scope.ServiceProvider.GetRequiredService<TaskDbContext>();
 
+            context.Database.Migrate();
+
             var testUserEmail = "testuser@example.com";
             var testUser = userManager.Users.FirstOrDefault(u => u.Email == testUserEmail);
 
