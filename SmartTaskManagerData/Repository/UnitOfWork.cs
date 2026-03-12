@@ -6,7 +6,7 @@ namespace SmartTaskManager.Infrastructure.Repository
     public class UnitOfWork : IUnitOfWork
     {
         private readonly TaskDbContext _context;
-        ITaskRepository _tasks;
+        ITaskRepository? _tasks;
 
         public UnitOfWork(TaskDbContext context)
         {

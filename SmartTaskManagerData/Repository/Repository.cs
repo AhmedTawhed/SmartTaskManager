@@ -22,7 +22,7 @@ namespace SmartTaskManager.Infrastructure.Repository
         public async Task<T?> GetById(Guid id) => await _dbSet.FindAsync(id);
         public async Task Add(T entity) => await _dbSet.AddAsync(entity);
         public void Update(T entity) => _dbSet.Update(entity);
-        public void Delete(Guid id) => _dbSet.Remove(_dbSet.Find(id));
+        public void Delete(Guid id) { var entity = _dbSet.Find(id); if (entity != null) _dbSet.Remove(entity); }
 
         public async Task<PagedList<T>> GetPage(GridRequest request, Expression<Func<T, bool>>? filter = null)
         {
@@ -58,7 +58,6 @@ namespace SmartTaskManager.Infrastructure.Repository
 
             var totalCount = await query.CountAsync();
 
-            // Pagination
             var items = await query
                 .Skip((request.PageNumber - 1) * request.PageSize)
                 .Take(request.PageSize)
