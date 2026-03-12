@@ -19,6 +19,17 @@
 
 ---
 
+## 🚀 Live Demo
+The app is containerized and hosted on **Render** with a MonsterASP SQL Server database:
+
+| | Link |
+|---|---|
+| 🌐 **Live App** | [smarttaskmanager-er43.onrender.com](https://smarttaskmanager-er43.onrender.com) |
+
+> ⚠️ Render free tier spins down after inactivity — first request may take 30–60s.
+
+---
+
 ## 🏗 Architecture
 
 ```
