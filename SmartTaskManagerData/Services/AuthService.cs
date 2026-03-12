@@ -17,7 +17,9 @@ namespace SmartTaskManager.Infrastructure.Services
         }
         public async Task<SignInResult> Login(LoginViewModel model)
         {
-            return await _signInManager.PasswordSignInAsync(model.UserName, model.Password, model.RememberMe, false);
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null) return SignInResult.Failed;
+            return await _signInManager.PasswordSignInAsync(user.UserName!, model.Password, model.RememberMe, false);
         }
 
         public async Task Logout() => await _signInManager.SignOutAsync();
